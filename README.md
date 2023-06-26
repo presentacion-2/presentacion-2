@@ -1,3 +1,4 @@
 # presentacion-2
 
-Integrantes: ...
+Integrantes:
+1. Javier Norambuena Leiva
