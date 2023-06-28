@@ -3,7 +3,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
 
 def test_TC_0009():
     driver = webdriver.Chrome()
@@ -57,7 +56,6 @@ def test_TC_0009():
     #Agregar libro
     agregar = wait.until(EC.presence_of_element_located(('xpath','//*[@id="navbarNavDropdown"]/ul/li[4]/a')))
     agregar.click()
-    time.sleep(5)
 
     titulo = driver.find_element("id","titulo")
     autor = driver.find_element("id","autor")
@@ -112,6 +110,5 @@ def test_TC_0009():
 
     eliminar = wait.until(EC.presence_of_element_located(('xpath','//*[@id="root"]/div/div/div[2]/form/button')))
     eliminar.click()
-    time.sleep(5)
 
     driver.close()
