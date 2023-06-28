@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
+
 
 def test_TC_0007():
     # Configuración del driver y apertura de la página
@@ -85,11 +85,9 @@ def test_TC_0007():
 
     eliminar = wait.until(EC.presence_of_element_located(('xpath','//*[@id="root"]/div/div/div[2]/form/button')))
     eliminar.click()
-    time.sleep(2)
 
     inicio = driver.find_element("css selector", '#navbarNavDropdown > ul > li:nth-child(1) > a')
     inicio.click()
-    time.sleep(1)
 
     buscar = wait.until(EC.presence_of_element_located(("id", "books")))
     buscar.clear()
