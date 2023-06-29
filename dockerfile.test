@@ -1,0 +1,51 @@
+FROM --platform=linux/amd64 node:latest
+
+RUN apt-get update && apt-get install -y \
+    wget \
+    libdbus-glib-1-2 \
+    libxt6 \
+    libgtk-3-0 \
+    --no-install-recommends \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN wget -O firefox.tar.bz2 "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US" \
+    && tar xvjf firefox.tar.bz2 -C /opt/ \
+    && ln -s /opt/firefox/firefox /usr/bin/firefox \
+    && rm firefox.tar.bz2
+
+# Set the environment variable for Firefox
+#ENV PATH="/opt/firefox:${PATH}"
+
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the source code to the working directory
+COPY . /app
+
+
+RUN apt install wget -y
+RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.29.0/geckodriver-v0.29.0-linux64.tar.gz 
+RUN tar -xvzf geckodriver-v0.29.0-linux64.tar.gz 
+RUN chmod +x geckodriver 
+RUN mv geckodriver /usr/local/bin/
+
+#RUN apt install firefox -y
+RUN export MOZ_HEADLESS=1
+
+RUN apt-get update && apt-get install -y python3 python3-venv python3-pip
+RUN python3 -m venv /venv
+ENV PATH="/venv/bin:$PATH"
+RUN pip3 install -r biblioteca-app/api/requirements.txt
+
+# Install Node.js dependencies
+RUN cd biblioteca-app/frontend && \
+    npm install --force
+
+EXPOSE 5000
+
+# Define the command to run the applications
+CMD ["sh", "-c", "python3 biblioteca-app/api/main.py & npm start --prefix biblioteca-app/frontend"]
+#CMD ["npm", "-v"]
+
