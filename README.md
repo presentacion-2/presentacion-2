@@ -1,4 +1,4 @@
-# presentacion-2
+# Repositorio de la aplicacion para la presentacion 2
 
 Integrantes:
 1. Javier Norambuena Leiva
