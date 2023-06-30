@@ -1,13 +1,13 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver import FirefoxOptions
+from selenium.webdriver.firefox.options import Options
 import time
 
 def test_TC_0001():
     # Configuración del driver y apertura de la página
-    opts = FirefoxOptions()
-    opts.add_argument("--headless")
-    driver = webdriver.Firefox(options=opts)
+    options = Options()
+    options.binary_location = r'C:\\Program Files\\Mozilla Firefox\\firefox.exe'
+    driver = webdriver.Firefox(options=options)
     driver.maximize_window()
     driver.get("http://localhost:3000/")
 
