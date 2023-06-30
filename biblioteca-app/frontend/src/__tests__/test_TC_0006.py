@@ -57,14 +57,9 @@ def test_TC_0006():
     botonEditar.click()
 
     # Modificamos el estado del libro
-    select_disp = driver.find_element("id", 'estado')
-    selectd = Select(select_disp)
-
-
-    dispo = driver.find_element(By.CSS_SELECTOR, 'option[value=Prestado]')
-
-    selectd.select_by_visible_text('Prestado')
-    assert dispo.is_selected()
+    titulo = driver.find_element("id","titulo")
+    titulo.clear()
+    titulo.send_keys("Deep")
 
     botonGuardar = wait.until(EC.presence_of_element_located(("xpath",'//*[@id="root"]/div/div/div/form/button')))
     botonGuardar.click()
@@ -89,26 +84,27 @@ def test_TC_0006():
     botonIngresar = wait.until(EC.presence_of_element_located(("xpath",'//*[@id="root"]/div/div/div[2]/table/tbody/tr/td[4]/button')))
     botonIngresar.click()
 
-    estado = wait.until(EC.presence_of_element_located(("xpath",'//*[@id="root"]/div/div/div[1]/table/tbody/tr/td[3]/div')))
-    assert estado.text == "Prestado" , 'No está prestado'
+    table = wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[1]/table')))
+
+    # Verificar si la tabla está vacía
+    rows = table.find_elements("xpath",'/html/body/div/div/div/div[1]/table/tbody/tr')
+    assert len(rows) != 0, f"La tabla está vacía"
+    nombre = rows[0].find_element("xpath", "/html/body/div/div/div/div[1]/table/tbody/tr/td[1]")
+    assert nombre.text == "Deep", f"El título obtenido '{nombre.text}' no coincide con el esperado Deep Learning"
+
    
     # Buscar libro modificado y volverlo a su estado original
 
     botonEditar = wait.until(EC.presence_of_element_located(("xpath",'//*[@id="root"]/div/div/div[2]/button')))
     botonEditar.click()
 
-    # Modificamos el estado del libro
-    select_disp = driver.find_element("id", 'estado')
-    selectd = Select(select_disp)
-
-
-    dispo = driver.find_element(By.CSS_SELECTOR, 'option[value=Disponible]')
-
-    selectd.select_by_visible_text('Disponible')
-    assert dispo.is_selected()
+    titulo = driver.find_element("id","titulo")
+    titulo.clear()
+    titulo.send_keys("Deep Learning")
 
     botonGuardar = wait.until(EC.presence_of_element_located(("xpath",'//*[@id="root"]/div/div/div/form/button')))
     botonGuardar.click()
 
-
     driver.close()
+
+test_TC_0006()
