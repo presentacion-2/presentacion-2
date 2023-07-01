@@ -3,16 +3,17 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver import FirefoxOptions
+from selenium.webdriver.firefox.options import Options
 import time
 
 def test_TC_0007():
     # Configuración del driver y apertura de la página
-    opts = FirefoxOptions()
-    opts.add_argument("--headless")
-    driver = webdriver.Firefox(options=opts)
+    options = Options()
+    options.binary_location = r'C:\\Program Files\\Mozilla Firefox\\firefox.exe'
+    driver = webdriver.Firefox(options=options)
     driver.maximize_window()
     driver.get("http://localhost:3000/")
+
     wait = WebDriverWait(driver, 10)
     
     # Verificar el título de la página
@@ -88,9 +89,11 @@ def test_TC_0007():
 
     eliminar = wait.until(EC.presence_of_element_located(('xpath','//*[@id="root"]/div/div/div[2]/form/button')))
     eliminar.click()
+    time.sleep(2)
 
     inicio = driver.find_element("css selector", '#navbarNavDropdown > ul > li:nth-child(1) > a')
     inicio.click()
+    time.sleep(1)
 
     buscar = wait.until(EC.presence_of_element_located(("id", "books")))
     buscar.clear()

@@ -3,13 +3,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver import FirefoxOptions
+from selenium.webdriver.firefox.options import Options
 import time
 
 def test_TC_0013():
-    opts = FirefoxOptions()
-    opts.add_argument("--headless")
-    driver = webdriver.Firefox(options=opts)
+    # Configuración del driver y apertura de la página
+    options = Options()
+    options.binary_location = r'C:\\Program Files\\Mozilla Firefox\\firefox.exe'
+    driver = webdriver.Firefox(options=options)
     driver.maximize_window()
     driver.get("http://localhost:3000/")
 

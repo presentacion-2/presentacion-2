@@ -3,15 +3,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver import FirefoxOptions
-import time
+from selenium.webdriver.firefox.options import Options
 
 def test_TC_0006():
-    opts = FirefoxOptions()
-    opts.add_argument("--headless")
-    driver = webdriver.Firefox(options=opts)
+    # Configuración del driver y apertura de la página
+    options = Options()
+    options.binary_location = r'C:\\Program Files\\Mozilla Firefox\\firefox.exe'
+    driver = webdriver.Firefox(options=options)
     driver.maximize_window()
     driver.get("http://localhost:3000/")
+
     wait = WebDriverWait(driver, 10)
 
     if(driver.title != "React App"):
@@ -56,14 +57,9 @@ def test_TC_0006():
     botonEditar.click()
 
     # Modificamos el estado del libro
-    select_disp = driver.find_element("id", 'estado')
-    selectd = Select(select_disp)
-
-
-    dispo = driver.find_element(By.CSS_SELECTOR, 'option[value=Prestado]')
-
-    selectd.select_by_visible_text('Prestado')
-    assert dispo.is_selected()
+    titulo = driver.find_element("id","titulo")
+    titulo.clear()
+    titulo.send_keys("Deep")
 
     botonGuardar = wait.until(EC.presence_of_element_located(("xpath",'//*[@id="root"]/div/div/div/form/button')))
     botonGuardar.click()
@@ -88,26 +84,27 @@ def test_TC_0006():
     botonIngresar = wait.until(EC.presence_of_element_located(("xpath",'//*[@id="root"]/div/div/div[2]/table/tbody/tr/td[4]/button')))
     botonIngresar.click()
 
-    estado = wait.until(EC.presence_of_element_located(("xpath",'//*[@id="root"]/div/div/div[1]/table/tbody/tr/td[3]/div')))
-    assert estado.text == "Prestado" , 'No está prestado'
+    table = wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[1]/table')))
+
+    # Verificar si la tabla está vacía
+    rows = table.find_elements("xpath",'/html/body/div/div/div/div[1]/table/tbody/tr')
+    assert len(rows) != 0, f"La tabla está vacía"
+    nombre = rows[0].find_element("xpath", "/html/body/div/div/div/div[1]/table/tbody/tr/td[1]")
+    assert nombre.text == "Deep", f"El título obtenido '{nombre.text}' no coincide con el esperado Deep Learning"
+
    
     # Buscar libro modificado y volverlo a su estado original
 
     botonEditar = wait.until(EC.presence_of_element_located(("xpath",'//*[@id="root"]/div/div/div[2]/button')))
     botonEditar.click()
 
-    # Modificamos el estado del libro
-    select_disp = driver.find_element("id", 'estado')
-    selectd = Select(select_disp)
-
-
-    dispo = driver.find_element(By.CSS_SELECTOR, 'option[value=Disponible]')
-
-    selectd.select_by_visible_text('Disponible')
-    assert dispo.is_selected()
+    titulo = driver.find_element("id","titulo")
+    titulo.clear()
+    titulo.send_keys("Deep Learning")
 
     botonGuardar = wait.until(EC.presence_of_element_located(("xpath",'//*[@id="root"]/div/div/div/form/button')))
     botonGuardar.click()
 
-
     driver.close()
+
+test_TC_0006()
